@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0b0d10;
+  --surface: #12151a;
+  --line: #22262e;
+  --fg: #e8eaee;
+  --muted: #8b919c;
+  --accent: #8b6cff;
+  --accent-ink: #0b0d10;
+  --ok: #34d399;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --line: #e3e3df;
+  --fg: #111317;
+  --muted: #5d636e;
+  --accent: #5b3df5;
+  --accent-ink: #ffffff;
+  --ok: #047857;
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-ok: var(--ok);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Faint grid behind the hero, echoing the original template's background art */
+.hero-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 30% 40%, black 20%, transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Hidden until ScrollAnimations sets GSAP's starting states (see layout.tsx) */
+.gsap-pending :is([data-hero], [data-hero-grid], [data-heading], [data-stack-group] > *, [data-job], [data-project-media], [data-project-part], [data-work], [data-reveal]) {
+  visibility: hidden;
+}
+
+/* Blinking caret for the hero's rotating role */
+@keyframes caret-blink {
+  0%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+.caret {
+  animation: caret-blink 1.05s steps(1, end) infinite;
 }
